@@ -17,13 +17,16 @@ import androidx.fragment.app.Fragment;
 
 import com.huawei.hms.hmsscankit.RemoteView;
 import com.huawei.hms.ml.scan.HmsScan;
+import com.huawei.scankit.java.Config;
 import com.huawei.scankit.java.R;
 import com.huawei.scankit.java.custom.BardCodeView;
 import com.huawei.scankit.java.custom.ScanUtils;
 
 public class CustomizedViewFragment extends Fragment {
 
-    public static String TAG = "CustomizedViewFragment";
+    private final static String TAG = "CustomizedViewFragment";
+
+    private static final int SCAN_FRAME_SIZE = 300;
 
     private BardCodeView bcvResult;
     private TextView tvResult;
@@ -31,12 +34,15 @@ public class CustomizedViewFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+        @NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState
+    ) {
         View view = inflater.inflate(R.layout.fragment_customized_view, container, false);
 
         FrameLayout flContent = view.findViewById(R.id.flCustomizedContent);
         tvResult = view.findViewById(R.id.tvCustomizedResult);
-
         bcvResult = view.findViewById(R.id.bcvCustomizedResult);
 
         // Set the scanning area. Set the parameters as required.
@@ -45,7 +51,7 @@ public class CustomizedViewFragment extends Fragment {
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
         // Set the width and height of the barcode scanning box to 300 dp.
-        final int SCAN_FRAME_SIZE = 300;
+
         int scanFrameSize = (int) (SCAN_FRAME_SIZE * density);
         Rect rect = new Rect();
         rect.left = screenWidth / 2 - scanFrameSize / 2;
@@ -106,7 +112,6 @@ public class CustomizedViewFragment extends Fragment {
     }
 
     private void showResult(HmsScan[] result) {
-
         Rect[] rectangles = new Rect[result.length];
         int position = 0;
 
@@ -117,7 +122,7 @@ public class CustomizedViewFragment extends Fragment {
             sb.append(ScanUtils.convertHmsScanToString(hmsScan)).append("\n");
 
             if (position < result.length - 1) {
-                sb.append("\n\n");
+                sb.append(Config.DOUBLE_LINE_TRANSLATION);
             }
 
             Rect rectangle = hmsScan.getBorderRect();

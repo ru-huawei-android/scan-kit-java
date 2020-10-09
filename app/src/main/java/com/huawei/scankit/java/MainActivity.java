@@ -28,17 +28,21 @@ public class MainActivity extends AppCompatActivity implements TabLayoutMediator
 
     private static String TAG = "MainActivity";
 
+    private final static int POSITION_DEFAULT_VIEW = 0;
+    private final static int POSITION_CUSTOMIZED_VIEW = 1;
+
+    private final static int PAGE_COUNT = 3;
+
     private static String[] PERMISSIONS = new String[] {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
-    private static int CAMERA_REQ_CODE = 1;
+    private final static int CAMERA_REQ_CODE = 1;
 
     private String[] tabTitles;
 
     private ViewPager2 viewPager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +101,10 @@ public class MainActivity extends AppCompatActivity implements TabLayoutMediator
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Config.REQUEST_CODE_SCAN_ONE && viewPager.getCurrentItem() == Config.POSITION_DEFAULT_VIEW) {
+
+        if (requestCode == Config.REQUEST_CODE_SCAN_ONE
+                && viewPager.getCurrentItem() == Config.POSITION_DEFAULT_VIEW
+        ) {
             String fragmentTag = getString(R.string.fragment_tag, Config.POSITION_DEFAULT_VIEW);
             DefaultViewFragment defaultViewFragment = (DefaultViewFragment)
                     getSupportFragmentManager().findFragmentByTag(fragmentTag);
@@ -109,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements TabLayoutMediator
 
     static class SearchViewPagerAdapter extends FragmentStateAdapter {
 
-        private final static int PAGE_COUNT = 3;
-
         public SearchViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
@@ -120,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements TabLayoutMediator
         public Fragment createFragment(int position) {
             switch (position)
             {
-                case 0: return new DefaultViewFragment();
-                case 1: return new CustomizedViewFragment();
+                case POSITION_DEFAULT_VIEW: return new DefaultViewFragment();
+                case POSITION_CUSTOMIZED_VIEW: return new CustomizedViewFragment();
                 default: return new BitmapFragment();
             }
         }

@@ -32,7 +32,6 @@ public class DefaultViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_default_view, container, false);
 
         view.findViewById(R.id.btnDefaultStartScan).setOnClickListener(button -> {
-
             // Set scanning parameters (Optional)
             HmsScanAnalyzerOptions options = new HmsScanAnalyzerOptions.Creator()
                 .setHmsScanTypes(HmsScan.QRCODE_SCAN_TYPE , HmsScan.DATAMATRIX_SCAN_TYPE)

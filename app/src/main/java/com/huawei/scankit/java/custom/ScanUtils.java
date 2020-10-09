@@ -9,6 +9,8 @@ import com.huawei.hms.ml.scan.HmsScan;
 
 public class ScanUtils {
 
+    private final static int RIGHT_ANGLE = 90;
+
     public static String convertHmsScanToString(HmsScan hmsScan) {
         StringBuilder sb = new StringBuilder();
         sb.append("Scan Type: ").append(convertScanTypeToString(hmsScan.getScanType()));
@@ -67,7 +69,7 @@ public class ScanUtils {
     public static Rect convertCameraRect(Rect rect, Size bitmapSize, Size scanViewSize) {
         RectF rectF = new RectF(rect);
         Matrix mat = new Matrix();
-        mat.setRotate(90, bitmapSize.getWidth() / 2f, bitmapSize.getHeight() / 2f);
+        mat.setRotate(RIGHT_ANGLE, bitmapSize.getWidth() / 2f, bitmapSize.getHeight() / 2f);
         mat.mapRect(rectF);
 
         rectF.top = rectF.top * scanViewSize.getHeight() / bitmapSize.getHeight();

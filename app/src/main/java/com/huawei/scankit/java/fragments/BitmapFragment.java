@@ -33,6 +33,7 @@ import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzer;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 import com.huawei.hms.mlsdk.common.MLFrame;
+import com.huawei.scankit.java.Config;
 import com.huawei.scankit.java.R;
 import com.huawei.scankit.java.custom.BardCodeView;
 import com.huawei.scankit.java.custom.CameraController;
@@ -56,7 +57,11 @@ public class BitmapFragment extends Fragment implements SurfaceHolder.Callback {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+        @NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState
+    ) {
         View view = inflater.inflate(R.layout.fragment_bitmap, container, false);
 
         tvResult = view.findViewById(R.id.tvBitmapResult);
@@ -156,21 +161,9 @@ public class BitmapFragment extends Fragment implements SurfaceHolder.Callback {
         HmsScan[] hmsScans = ScanUtil.decodeWithBitmap(getActivity(), bitmap, options);
         // Process the decoding result when the scanning is successful.
         if (hmsScans != null && hmsScans.length > 0 && !TextUtils.isEmpty(hmsScans[0].getOriginalValue())) {
-            // Display the scanning result.
-
             Size size = new Size(bitmap.getWidth(), bitmap.getHeight());
+            // Display the scanning result.
             showResult(hmsScans, size);
-
-            // If zoomValue is greater than 1.0, adjust the focal length using getZoomValue() and scan the barcode again.
-            if (hmsScans[0].getZoomValue() != 1.0) {
-                // Set the focal length of the camera. The camera generates new bitmap data and scans again. (The convertZoomInt() function converts the magnification level to the focal length parameter that can be received and recognized by the camera.)
-                /*
-                parameters = camera.getParameters();
-                parameters.setZoom(convertZoomInt(hmsScans[0].getZoomValue()));
-                camera.setParameters(parameters);
-                */
-
-            }
         }
     }
 
@@ -186,7 +179,6 @@ public class BitmapFragment extends Fragment implements SurfaceHolder.Callback {
         SparseArray<HmsScan> result = barcodeDetector.analyseFrame(image);
         // Process the decoding result when the scanning is successful.
         if (result != null && result.size() > 0) {
-            // Display the scanning result.
             Size size = new Size(bitmap.getWidth(), bitmap.getHeight());
 
             HmsScan[] hmsScans = new HmsScan[result.size()];
@@ -195,6 +187,7 @@ public class BitmapFragment extends Fragment implements SurfaceHolder.Callback {
                 hmsScans[i] = result.get(key);
             }
 
+            // Display the scanning result.
             showResult(hmsScans, size);
         }
     }
@@ -211,7 +204,7 @@ public class BitmapFragment extends Fragment implements SurfaceHolder.Callback {
             sb.append(ScanUtils.convertHmsScanToString(hmsScan));
 
             if (position < result.length - 1) {
-                sb.append("\n\n");
+                sb.append(Config.DOUBLE_LINE_TRANSLATION);
             }
 
             Rect borderRect = ScanUtils.convertCameraRect(

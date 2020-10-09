@@ -68,7 +68,7 @@ public class CameraDeviceCallback extends CameraDevice.StateCallback {
                     builder.addTarget(imageReader.getSurface());
                     cameraSession.setRepeatingRequest(builder.build(), null, null);
                 } catch (CameraAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "CameraCaptureSession.StateCallback Error", e);
                 }
             }
 
@@ -78,12 +78,14 @@ public class CameraDeviceCallback extends CameraDevice.StateCallback {
             }
         };
 
+        Surface previewSurface = cameraPreview.getHolder().getSurface();
+        Surface imageSurface = imageReader.getSurface();
 
         try {
             if (Config.isVersionP()) {
                 Vector<OutputConfiguration> outputConfigurations = new Vector<>();
-                outputConfigurations.add(new OutputConfiguration(cameraPreview.getHolder().getSurface()));
-                outputConfigurations.add(new OutputConfiguration(imageReader.getSurface()));
+                outputConfigurations.add(new OutputConfiguration(previewSurface));
+                outputConfigurations.add(new OutputConfiguration(imageSurface));
                 SessionConfiguration sessionConfiguration = new SessionConfiguration(
                         SessionConfiguration.SESSION_REGULAR, outputConfigurations,
                         Executors.newSingleThreadExecutor(), csc
@@ -91,16 +93,14 @@ public class CameraDeviceCallback extends CameraDevice.StateCallback {
                 cameraDevice.createCaptureSession(sessionConfiguration);
             } else {
                 Vector<Surface> v = new Vector<>();
-                v.add(cameraPreview.getHolder().getSurface());
-                v.add(imageReader.getSurface());
+                v.add(previewSurface);
+                v.add(imageSurface);
                 cameraDevice.createCaptureSession(v, csc, handler);
             }
         } catch (CameraAccessException e) {
-            Log.e(TAG, "Error", e);
+            Log.e(TAG, "CameraDevice.StateCallback Error", e);
         }
     }
-
-
 
     @Override
     public void onDisconnected(@NonNull CameraDevice cameraDevice) {

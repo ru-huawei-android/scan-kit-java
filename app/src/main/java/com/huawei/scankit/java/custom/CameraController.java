@@ -20,6 +20,8 @@ public class CameraController {
     private static String THREAD_NAME = "Thread";
     private static String TAG = "CameraController";
 
+    private final static int MAX_IMAGES = 5;
+
     private CameraManager cameraManager;
     private SurfaceView cameraPreview;
     private ImageReader imageReader;
@@ -74,7 +76,6 @@ public class CameraController {
     private String getBackFacingCameraId(CameraManager cameraManager){
         try {
             String[] ids = cameraManager.getCameraIdList();
-            Log.i(TAG, "Found Size: " + ids.length);
             for (String id : ids) {
                 Log.i(TAG, "Found Camera ID: " + id);
                 CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
@@ -107,7 +108,7 @@ public class CameraController {
                 int width = size.getWidth();
                 int height = size.getHeight();
                 cameraPreview.getHolder().setFixedSize(width, height);
-                imageReader = ImageReader.newInstance(width, height, ImageFormat.YUV_420_888, 50);
+                imageReader = ImageReader.newInstance(width, height, ImageFormat.YUV_420_888, MAX_IMAGES);
                 imageReader.setOnImageAvailableListener(listener, handler);
             }
         } catch (CameraAccessException e) {

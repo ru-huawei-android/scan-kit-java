@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/flCustomizedContent">
+
+    <com.huawei.scankit.java.custom.BardCodeView
+        android:id="@+id/bcvCustomizedResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/tvCustomizedResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin_result"
+        android:textColorLink="@color/colorAccent"
+        android:background="@color/result_text_background"
+        android:padding="@dimen/padding" />
+
+</FrameLayout>
